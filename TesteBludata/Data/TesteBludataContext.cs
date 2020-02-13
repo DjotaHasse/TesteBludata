@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TesteBludata.Models;
 
 namespace TesteBludata.Data
@@ -14,6 +10,8 @@ namespace TesteBludata.Data
         {
         }
 
-        public DbSet<TesteBludata.Models.Empresa> Empresa { get; set; }
+        public DbSet<Empresa> Empresa { get; set; }
+        public DbSet<Fornecedor> Fornecedor { get; set; }
+        public DbSet<Telefone> Telefone { get; set; }
     }
 }
