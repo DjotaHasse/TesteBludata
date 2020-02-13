@@ -1,10 +1,10 @@
 ﻿@model TesteBludata.Models.Empresa
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Adicionar";
 }
 
-<h2>Create</h2>
+<h2>Adicionar</h2>
 
 <h4>Empresa</h4>
 <hr />
@@ -13,7 +13,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="RazaoSocial" class="control-label"></label>
+                <label asp-for="RazaoSocial" class="control-label">Razão Social</label>
                 <input asp-for="RazaoSocial" class="form-control" />
                 <span asp-validation-for="RazaoSocial" class="text-danger"></span>
             </div>
@@ -28,14 +28,14 @@
                 <span asp-validation-for="UF" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Adicionar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar para listagem</a>
 </div>
 
 @section Scripts {
