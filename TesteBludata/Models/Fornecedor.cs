@@ -12,6 +12,7 @@ namespace TesteBludata.Models
         public string RG { get; set; }
         public DateTime DataNascimento { get; set; }
         public Empresa Empresa { get; set; }
+        public int EmpresaId { get; set; }
         public ICollection<Telefone> Telefones { get; set; } = new List<Telefone>();
 
         public Fornecedor()

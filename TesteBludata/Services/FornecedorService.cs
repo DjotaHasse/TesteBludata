@@ -23,6 +23,7 @@ namespace TesteBludata.Services
 
         public void Insert(Fornecedor obj) 
         {
+            obj.Empresa = _context.Empresa.First();
             _context.Add(obj);
             _context.SaveChanges();
         }
