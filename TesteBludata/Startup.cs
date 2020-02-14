@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using TesteBludata.Data;
+using TesteBludata.Services;
 
 namespace TesteBludata
 {
@@ -38,6 +39,8 @@ namespace TesteBludata
 
             services.AddDbContext<TesteBludataContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("TesteBludataContext"), builder => builder.MigrationsAssembly("TesteBludata")));
+
+            services.AddScoped<FornecedorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
