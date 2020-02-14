@@ -20,5 +20,11 @@ namespace TesteBludata.Services
         {
             return _context.Fornecedor.ToList();    
         }
+
+        public void Insert(Fornecedor obj) 
+        {
+            _context.Add(obj);
+            _context.SaveChanges();
+        }
     }
 }
