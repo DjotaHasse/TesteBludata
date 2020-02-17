@@ -1,0 +1,49 @@
+﻿
+@model TesteBludata.Models.Fornecedor
+
+@{
+    ViewData["Title"] = "Excluir";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>Você tem certeza que deseja excluir?</h3>
+
+<div>
+    <h4>Fornecedor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CPFCNPJ)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CPFCNPJ)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RG)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RG)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DataNascimento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DataNascimento)
+        </dd>
+    </dl>
+
+    <form asp-action="Delte">
+        <input type="hidden" asp-for="Id" /> 
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index">Voltar para Lista</a>
+    </form>
+</div>
+
+
