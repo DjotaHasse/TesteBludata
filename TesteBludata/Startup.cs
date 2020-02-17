@@ -41,6 +41,7 @@ namespace TesteBludata
                     options.UseMySql(Configuration.GetConnectionString("TesteBludataContext"), builder => builder.MigrationsAssembly("TesteBludata")));
 
             services.AddScoped<FornecedorService>();
+            services.AddScoped<EmpresaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

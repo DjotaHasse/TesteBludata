@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TesteBludata.Models;
+using TesteBludata.Models.ViewModels;
 using TesteBludata.Services;
 
 namespace TesteBludata.Controllers
@@ -11,10 +12,13 @@ namespace TesteBludata.Controllers
     public class FornecedoresController : Controller
     {
         private readonly FornecedorService _fornecedorService;
+        private readonly EmpresaService _empresaService;
 
-        public FornecedoresController(FornecedorService fornecedorService)
+        public FornecedoresController(FornecedorService fornecedorService, EmpresaService empresaService)
         {
             _fornecedorService = fornecedorService;
+            _empresaService = empresaService;
+
         }
         public IActionResult Index()
         {
@@ -25,7 +29,9 @@ namespace TesteBludata.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var empresas = _empresaService.FindAll();
+            var viewModel = new FornecedorFormViewModel { Empresas = empresas };
+            return View(viewModel);
         }
 
         [HttpPost]

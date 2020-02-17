@@ -7,24 +7,18 @@ using TesteBludata.Models;
 
 namespace TesteBludata.Services
 {
-    public class FornecedorService
+    public class EmpresaService
     {
         private readonly TesteBludataContext _context;
 
-        public FornecedorService(TesteBludataContext context) 
+        public EmpresaService(TesteBludataContext context)
         {
             _context = context;
         }
 
-        public List<Fornecedor> FindAll()
+        public List<Empresa> FindAll() 
         {
-            return _context.Fornecedor.ToList();    
-        }
-
-        public void Insert(Fornecedor obj) 
-        {
-            _context.Add(obj);
-            _context.SaveChanges();
+            return _context.Empresa.OrderBy(x => x.RazaoSocial).ToList();
         }
     }
 }
