@@ -18,44 +18,70 @@ namespace TesteBludata.Services
             _context = context;
         }
 
-        public List<Fornecedor> FindAll()
+        public async Task<List<Fornecedor>> FindAllAsync()
         {
-            return _context.Fornecedor.ToList();    
+            return await _context.Fornecedor.ToListAsync();    
         }
 
-        public void Insert(Fornecedor obj) 
+        public async Task InsertAsync(Fornecedor obj) 
         {
             _context.Add(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Fornecedor FindById(int id) 
+        public async Task<Fornecedor> FindByIdAsync(int id) 
         {
-            return _context.Fornecedor.Include(obj => obj.Empresa).FirstOrDefault(obj => obj.Id == id);    
+            return  await _context.Fornecedor.Include(obj => obj.Empresa).FirstOrDefaultAsync(obj => obj.Id == id);    
         }
 
-        public void Remove(int id) 
+        public async Task RemoveAsync(int id) 
         {
-            var obj = _context.Fornecedor.Find(id);
-            _context.Fornecedor.Remove(obj);
-            _context.SaveChanges();
+            try
+            {
+                var obj = await _context.Fornecedor.FindAsync(id);
+                _context.Fornecedor.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e) 
+            {
+                throw new IntegrityException(e.Message);
+            }
         }
 
-        public void Update(Fornecedor obj)
+        public async Task UpdateAsync(Fornecedor obj)
         {
-            if (!_context.Fornecedor.Any(x => x.Id == obj.Id))
+            bool hasAny = await _context.Fornecedor.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)
             {
                 throw new NotFoundException("Id não encontrado");
             }
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbConcurrencyException e) 
             {
                 throw new DbConcurrencyException(e.Message);
             }
+        }
+
+        public async Task<List<Fornecedor>> FindByFilterAsync(string name, string cpfcnpj, DateTime? dataCadastro) 
+        { 
+            var result = from obj in _context.Fornecedor select obj;
+            if (!String.IsNullOrEmpty(name)) 
+            {
+                result = result.Where(x => x.Nome == name);   
+            }
+            if (!String.IsNullOrEmpty(cpfcnpj))
+            {
+                result = result.Where(x => x.CPFCNPJ == cpfcnpj);
+            }
+            if (dataCadastro.HasValue)
+            {
+                result = result.Where(x => x.DataCadastro == dataCadastro);
+            }
+            return await result.Include(x => x.Empresa).OrderByDescending(x => x.Nome).ToListAsync();
         }
     }
 }

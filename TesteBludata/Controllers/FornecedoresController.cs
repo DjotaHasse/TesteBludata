@@ -24,43 +24,42 @@ namespace TesteBludata.Controllers
             _empresaService = empresaService;
 
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _fornecedorService.FindAll();
-
-            return View(list);
+            return View(await _fornecedorService.FindAllAsync());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var empresas = _empresaService.FindAll();
+            var empresas = await _empresaService.FindAllAsync();
             var viewModel = new FornecedorFormViewModel { Empresas = empresas };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken] //Contra ataques no ASP.NET
-        public IActionResult Create(Fornecedor fornecedor) 
+        public async Task<IActionResult> Create(Fornecedor fornecedor) 
         {
             if (!ModelState.IsValid)
             {
                 //Para validar quando JS estiver desabilitado
-                var empresas = _empresaService.FindAll();
+                var empresas = await _empresaService.FindAllAsync();
                 var viewModel = new FornecedorFormViewModel { Fornecedor = fornecedor, Empresas = empresas };
                 return View(viewModel);
             }
-            _fornecedorService.Insert(fornecedor);
+            fornecedor.DataCadastro = DateTime.Now;
+            await _fornecedorService.InsertAsync(fornecedor);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int? id) 
+        public async Task<IActionResult> Delete(int? id) 
         {
             if (id == null) 
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
 
-            var obj = _fornecedorService.FindById(id.Value);
+            var obj = await _fornecedorService.FindByIdAsync(id.Value);
             if (obj == null) 
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
@@ -71,20 +70,27 @@ namespace TesteBludata.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id) 
+        public async Task<IActionResult> Delete(int id) 
         {
-            _fornecedorService.Remove(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _fornecedorService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
         }
 
-        public IActionResult Details(int? id) 
+        public async Task<IActionResult> Details(int? id) 
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" }); 
             }
 
-            var obj = _fornecedorService.FindById(id.Value);
+            var obj = await _fornecedorService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
@@ -93,32 +99,32 @@ namespace TesteBludata.Controllers
             return View(obj);
         }
 
-        public IActionResult Edit(int? id) 
+        public async Task<IActionResult> Edit(int? id) 
         {
             if (id == null) 
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
 
-            var obj = _fornecedorService.FindById(id.Value);
+            var obj = await _fornecedorService.FindByIdAsync(id.Value);
             if (obj == null) 
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
             }
 
-            List<Empresa> empresas = _empresaService.FindAll();
+            List<Empresa> empresas = await _empresaService.FindAllAsync();
             FornecedorFormViewModel viewModel = new FornecedorFormViewModel { Fornecedor = obj, Empresas = empresas };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Fornecedor fornecedor) 
+        public async Task<IActionResult> Edit(int id, Fornecedor fornecedor) 
         { 
             if (!ModelState.IsValid)
             {
                 //Para validar quando JS estiver desabilitado
-                var empresas = _empresaService.FindAll();
+                var empresas = await _empresaService.FindAllAsync();
                 var viewModel = new FornecedorFormViewModel { Fornecedor = fornecedor, Empresas = empresas };
                 return View(viewModel);
             }
@@ -130,7 +136,7 @@ namespace TesteBludata.Controllers
 
             try
             {
-                _fornecedorService.Update(fornecedor);
+                await _fornecedorService.UpdateAsync(fornecedor);
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)
@@ -148,6 +154,11 @@ namespace TesteBludata.Controllers
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             };
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> FilterSearch(string name, string cpfCnpj, DateTime? dataCadastro) 
+        {
+            return View(await _fornecedorService.FindByFilterAsync(name, cpfCnpj, dataCadastro));    
         }
     }
 }

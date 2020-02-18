@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<TesteBludata.Models.Fornecedor>
+@using TesteBludata.Extensions;
 
 @{
     ViewData["Title"] = "Fornecedores";
@@ -40,7 +41,8 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CPFCNPJ)
+                @{ string cpfCnpj = item.CPFCNPJ.FormatarCpfCnpj();}
+                @Html.DisplayFor(modelItem => cpfCnpj)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataCadastro)

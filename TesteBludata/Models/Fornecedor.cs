@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TesteBludata.Extensions;
 
 namespace TesteBludata.Models
 {
@@ -11,12 +12,14 @@ namespace TesteBludata.Models
         public string Nome { get; set; }
         [Display(Name = "CPF/CNPJ")]
         [Required(ErrorMessage = "{0} requerido")]
+        [StringLength(14, MinimumLength = 11, ErrorMessage = "{0} deve conter no mínimo {2} e no máximo {1} números")]
+        private string cpfcnpj;
         public string CPFCNPJ { get; set; }
         [Display(Name = "Data Cadastro")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataCadastro { get; set; }
         public string RG { get; set; }
-        [Display(Name = "DataNascimento")]
+        [Display(Name = "Data Nascimento")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataNascimento { get; set; }

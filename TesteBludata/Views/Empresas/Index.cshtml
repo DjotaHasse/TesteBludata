@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<TesteBludata.Models.Empresa>
 
+@using TesteBludata.Extensions;
+
 @{
     ViewData["Title"] = "Empresas";
 }
@@ -25,14 +27,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) 
+        @foreach (var item in Model)
         {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.RazaoSocial)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CNPJ)
+                @{ string cnpj = item.CNPJ.FormatarCpfCnpj();}
+                @Html.DisplayFor(modelItem => cnpj)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UF)

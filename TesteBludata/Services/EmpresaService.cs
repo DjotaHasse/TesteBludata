@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TesteBludata.Data;
 using TesteBludata.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TesteBludata.Services
 {
@@ -16,9 +17,9 @@ namespace TesteBludata.Services
             _context = context;
         }
 
-        public List<Empresa> FindAll() 
+        public async Task<List<Empresa>> FindAllAsync() 
         {
-            return _context.Empresa.OrderBy(x => x.RazaoSocial).ToList();
+            return await _context.Empresa.OrderBy(x => x.RazaoSocial).ToListAsync();
         }
     }
 }
